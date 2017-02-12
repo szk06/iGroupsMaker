@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>iGroupsMaker Sign Up</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        window.onload=pageLoad;
+        var passer = true;
+        function pageLoad(){
+            document.getElementById("email").onblur = checker;
+            document.getElementById("idnumber").onblur = mycheck;
+            //document.getElementById("idnumber").value="";
+            //document.getElementById("pass1").value="";
+            document.getElementById("myform").reset();
+            
+        }
+        function mycheck(){
+            var idnumber = document.getElementById("idnumber");
+            var idnumberval = idnumber.value;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    var mytext = xhttp.responseText;
+                    if(mytext=="no"){
+                        passer = false;
+                    
+                    var x = document.getElementById("eidnumber");
+                    x.innerHTML = "This id is for other student";
+                    idnumber.style = 'border:2px solid red';                    }
+                
+                }
+            };
+            xhttp.open("POST", "sign2.php", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("idnumber="+idnumberval);
+        
+        }
+        function checker(){
+            var email = document.getElementById("email");
+            var emailval = email.value;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    //document.getElementById("demo").innerHTML = xhttp.responseText;
+                    var mytext = xhttp.responseText;
+                    //alert(mytext);
+                    if(mytext == "no"){
+                        passer = false;
+                        var x = document.getElementById("eemail");
+                        x.innerHTML = "this email is already taken";
+                        email.style = 'border:2px solid red';
+                        
+                    }
+                }
+            };
+            xhttp.open("POST", "sign.php", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("email="+emailval);
+
+
+        }
+        function validate(){
+            var pass1 = document.getElementById("pass1");
+            var pass2 = document.getElementById("pass2");
+            var email = document.getElementById("email");
+            var fname = document.getElementById("fname");
+            var lname = document.getElementById("lname");
+            var mypass1 = false;
+            var passing = true;
+            var idnumber = document.getElementById("idnumber");
+            
+            
+            ///Password validation
+            if(pass1.value=="" || pass1.value==null){
+                var x = document.getElementById("epass1");
+                x.innerHTML = "this field can't be empty";
+                pass1.style = 'border:2px solid red';
+                passing = false;
+            }else{
+                
+                
+                var str  = pass1.value;
+                //alert(str);
+                var n = str.length;
+                if(n<6){
+                    //alert(pasval.length);
+                    var x = document.getElementById("epass1");
+                    x.innerHTML = "length of password should be minimum of 6";
+                    pass1.style = 'border:2px solid red';
+                    passing = false;
+                }else{
+                    var x = document.getElementById("epass1");
+                    x.innerHTML = "";
+                    pass1.style = 'border:0.5px solid white';
+                    mypass1 = true;
+                    
+                }
+            }
+            if(pass2.value=="" || pass2.value==null){
+                var x = document.getElementById("epass2");
+                x.innerHTML = "this field can't be empty";
+                pass2.style = 'border:2px solid red';
+                passing = false;
+            }else{
+                if(mypass1==true){
+                    if(pass1.value!=pass2.value){
+                        var z = document.getElementById("onpass");
+                        z.innerHTML = "Passwords don't match";
+                        pass1.style = 'border:2px solid red';
+                        pass2.style = 'border:2px solid red';
+                        passing = false;
+                    }
+                }
+                else{
+                
+                    var x = document.getElementById("epass2");
+                    x.innerHTML = "";
+                    pass2.style = 'border:0.5px solid white';
+                }
+            }
+            
+            ////////////////////////////////////////
+            ///////////////////email validation///////////////
+            if(email.value=="" || email.value==null){
+                var x = document.getElementById("eemail");
+                x.innerHTML = "this field can't be empty";
+                email.style = 'border:2px solid red';
+                passing = false;
+            }else{
+                var x = document.getElementById("eemail");
+                x.innerHTML = "";
+                email.style = 'border:0.5px solid white';
+            }
+            /////////////////////fname validate///////////////////
+            if(fname.value=="" || fname.value==null){
+                var x = document.getElementById("efname");
+                x.innerHTML = "this field can't be empty";
+                fname.style = 'border:2px solid red';
+                passing = false;
+            }else{
+                if(passer!=false){
+                    var x = document.getElementById("efname");
+                    x.innerHTML = "";
+                    pass1.style = 'border:0.5px solid white';
+                }
+            }
+            /////////lname validation////////////////
+            if(lname.value=="" || lname.value==null){
+                var x = document.getElementById("elname");
+                x.innerHTML = "this field can't be empty";
+                lname.style = 'border:2px solid red';
+                passing = false;
+            }else{
+                var x = document.getElementById("elname");
+                x.innerHTML = "";
+                pass1.style = 'border:0.5px solid white';
+            }
+            if(idnumber.value=="" || idnumber.value==null){
+                
+                var x = document.getElementById("eidnumber");
+                x.innerHTML = "this field can't be empty";
+                idnumber.style = 'border:2px solid red';
+                passing = false;
+            }
+            
+            else{
+                var idval = idnumber.value;
+                var n = idval.length;
+                var pattern = /^[0-9]{9}$/;
+                var result = idval.match(pattern);
+                //alert(result);
+                if(result==null){
+                    var x = document.getElementById("eidnumber");
+                    x.innerHTML = "id number is 9 digits";
+                    idnumber.style = 'border:2px solid red';
+                    passing = false;
+                }
+                
+                else{
+                    var x = document.getElementById("eidnumber");
+                    x.innerHTML = "";
+                    idnumber.style = 'border:0.5px solid white';
+                }
+            }
+            //alert("passing"+passing);
+            if(passing == false){
+                    return false;
+            }
+            //alert("passer"+passer);
+            if(passer == false){
+                return false;
+            }
+        
+        }
+    
+    
+    
+    </script>
+
+    <style type="text/css">
+        span.formerror {
+        color:red;
+        font-size:12pt;
+        font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign Up</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" onsubmit= "return validate()" method="POST" action="signinto.php" id="myform">
+                            <fieldset>
+								<div class="form-group">
+                                    <input class="form-control" id="fname" placeholder="First Name" name="fname" type="text" autofocus>
+                                    <span id="efname" class="formerror"></span>
+                                </div>
+								<div class="form-group">
+                                    <input class="form-control" id="lname" placeholder="Last Name" name="lname" type="text" autofocus>
+                                    <span id="elname" class="formerror"></span>
+                                </div>
+								<div class="form-group">
+                                    <input class="form-control" id="email" placeholder="E-mail" name="email" type="email" autofocus>
+                                    <span id="eemail" class="formerror"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" id="idnumber" placeholder="ID" name="idnumber" type="text" autofocus>
+                                    <span id="eidnumber" class="formerror"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" id="pass1" placeholder="Password" name="password" type="password" autofocus>
+                                    <span id="epass1" class="formerror"></span>
+                                </div>
+								<div class="form-group">
+                                    <input class="form-control" id="pass2" placeholder="Confirm Password" name="confirmpassword" type="password" value="">
+                                    <span id="epass2" class="formerror"></span>
+                                </div>
+                                <span class = "formerror" id="onpass"></span>
+
+                                <span class="formerror">A user with similar ID or email is already registered</span>
+
+                                <input type="submit" value="Sign Up" class="btn btn-lg btn-success btn-block">
+                              
+								
+								</div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+
+</body>
+
+</html>
